@@ -2,9 +2,8 @@
 #include <sstream>
 #include "Artemis/Component.h"
 #include "Artemis/World.h"
-//#include "EntityManager.h"
-
-using namespace std;
+#include "Artemis/EntityManager.h"
+#include "Artemis/EntityStateMachine.h"
 
 namespace artemis {
   
@@ -20,11 +19,11 @@ namespace artemis {
   }
   
   
-  void Entity::addSystemBit(bitset<BITSIZE> bit) {
+  void Entity::addSystemBit(std::bitset<BITSIZE> bit) {
     systemBits |= bit;
   }
   
-  void Entity::addTypeBit(bitset<BITSIZE> bit) {
+  void Entity::addTypeBit(std::bitset<BITSIZE> bit) {
     typeBits |= bit;
   }
   
@@ -40,11 +39,11 @@ namespace artemis {
     return id;
   }
   
-  bitset<BITSIZE> Entity::getSystemBits() {
+  std::bitset<BITSIZE> Entity::getSystemBits() {
     return systemBits;
   }
   
-  bitset<BITSIZE> Entity::getTypeBits() {
+  std::bitset<BITSIZE> Entity::getTypeBits() {
     return typeBits;
   }
   
@@ -56,23 +55,36 @@ namespace artemis {
     return entityManager->isActive(this->getId());
   }
   
-  void Entity::refresh() {
-    world->refreshEntity(*this);
-  }
   
   void Entity::addComponent(Component * c){
     entityManager->addComponent(*this,c);
   }
   
-  void Entity::removeComponent(ComponentType & type) {
-    entityManager->removeComponent(*this, type);
+  void Entity::deleteComponent(ComponentType & type) {
+    entityManager->deleteComponent(*this, type);
   }
-  
-  void Entity::removeSystemBit(bitset<BITSIZE> bit) {
+
+  void Entity::deleteComponent(Component* c)
+  {
+	  ComponentType type = ComponentTypeManager::getTypeFor(typeid(*c));
+	  deleteComponent(type);
+  }
+
+  void Entity::removeComponent(ComponentType & type) {
+	  entityManager->removeComponent(*this, type);
+  }
+
+  void Entity::removeComponent(Component* c)
+  {
+	  ComponentType type = ComponentTypeManager::getTypeFor(typeid(*c));
+	  removeComponent(type);
+  }
+
+  void Entity::removeSystemBit(std::bitset<BITSIZE> bit) {
     systemBits &= ~bit;
   }
   
-  void Entity::removeTypeBit(bitset<BITSIZE> bit) {
+  void Entity::removeTypeBit(std::bitset<BITSIZE> bit) {
     typeBits &= ~bit;
   }
   
@@ -81,20 +93,21 @@ namespace artemis {
     systemBits = 0;
   }
   
-  void Entity::setGroup(string group) {
-    
+  void Entity::setGroup(const std::string& group)
+  {    
     world->getGroupManager()->set(group, *this);
   }
   
-  void Entity::setSystemBits(bitset<BITSIZE> systemBits) {
+  void Entity::setSystemBits(std::bitset<BITSIZE> systemBits) {
     this->systemBits = systemBits;
   }
   
-  void Entity::setTag(string tag) {
+  void Entity::setTag(const std::string& tag)
+  {
     world->getTagManager()->subscribe(tag, *this);
   }
   
-  void Entity::setTypeBits(bitset<BITSIZE> typeBits) {
+  void Entity::setTypeBits(std::bitset<BITSIZE> typeBits) {
     this->typeBits = typeBits;
   }
   
@@ -111,4 +124,27 @@ namespace artemis {
   void Entity::remove() {
     world->deleteEntity(*this);
   }
+
+  EntityStateMachine* Entity::createStateMachine()
+  {
+	  assert(fsm == NULL && "FSM is already created.");
+	  if (fsm == NULL)
+	  {
+		fsm = new EntityStateMachine(this);
+	  }
+	  return fsm;
+  }
+
+
+  EntityStateMachine* Entity::getStateMachine()
+  {
+	  return fsm;
+  }
+
+  void Entity::changeStateTo(const std::string& newState)
+  {
+	  world->changeEntityStateTo(this, newState);
+  }
+
+
 };

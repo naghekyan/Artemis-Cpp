@@ -36,7 +36,7 @@ namespace artemis {
       if (components->get(e.getId()) != NULL)
       {
         // Entity already had this component, need to perform component removal first
-        removeComponent(e, type);
+        deleteComponent(e, type);
         refresh(e);
       }
     }
@@ -45,6 +45,7 @@ namespace artemis {
     
     components = NULL;
     
+	world->refreshEntity(e);
   };
   
   Entity& EntityManager::create() {
@@ -131,22 +132,34 @@ namespace artemis {
     activeEntities.set(e.getId(), NULL);
     e.setTypeBits(0);
     refresh(e);
-    removeComponentsOfEntity(e);
+    deleteComponentsOfEntity(e);
     count--;
     totalRemoved++;
     removedAndAvailable.add(&e);
   };
   
-  void EntityManager::removeComponent(Entity &e, ComponentType & type) {
+  void EntityManager::deleteComponent(Entity &e, ComponentType & type) {
     Bag<Component* > * components = componentsByType.get(type.getId());
     
     delete components->get(e.getId());
     components->set(e.getId(), NULL);
     e.removeTypeBit(type.getBit());
     components = NULL;
+
+	world->refreshEntity(e);
+  };
+
+  void EntityManager::removeComponent(Entity &e, ComponentType & type) {
+	  Bag<Component* > * components = componentsByType.get(type.getId());
+
+	  components->set(e.getId(), NULL);
+	  e.removeTypeBit(type.getBit());
+	  components = NULL;
+
+	  world->refreshEntity(e);
   };
   
-  void EntityManager::removeComponentsOfEntity(Entity& e) {
+  void EntityManager::deleteComponentsOfEntity(Entity& e) {
     for(int i=0; i<componentsByType.getCapacity(); i++) {
       Bag<Component*> * components = componentsByType.get(i);
       
@@ -158,9 +171,8 @@ namespace artemis {
       
       components = NULL;
     }
-    
   };
-  
+
   void EntityManager::removeAllEntities(){
     
     for(int i=0; i<activeEntities.getCapacity(); i++)

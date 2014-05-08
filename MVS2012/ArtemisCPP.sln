@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArtemisCPP", "ArtemisCPP.vcxproj", "{EABAA2A8-A59C-405A-8ED0-648C03267B2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EABAA2A8-A59C-405A-8ED0-648C03267B2A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EABAA2A8-A59C-405A-8ED0-648C03267B2A}.Debug|Win32.Build.0 = Debug|Win32
+		{EABAA2A8-A59C-405A-8ED0-648C03267B2A}.Release|Win32.ActiveCfg = Release|Win32
+		{EABAA2A8-A59C-405A-8ED0-648C03267B2A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

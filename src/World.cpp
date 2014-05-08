@@ -4,6 +4,7 @@
 #include "Artemis/EntityManager.h"
 #include "Artemis/SystemBitManager.h"
 #include "Artemis/ComponentType.h"
+#include "Artemis/EntityStateMachine.h"
 
 
 namespace artemis {
@@ -22,6 +23,11 @@ namespace artemis {
 			deleted.add(&e);
 	}
   
+	void World::changeEntityStateTo(Entity* e, const std::string& newState)
+	{
+		entityNewStateMap[e] = newState;
+	}
+
 	float World::getDelta() {
 		return this->delta;
 	}
@@ -43,6 +49,18 @@ namespace artemis {
 	}
   
 	void World::loopStart() {
+
+		if (entityNewStateMap.size() > 0)
+		{
+			EntityToStateMap::iterator it;
+			for (it = entityNewStateMap.begin(); it != entityNewStateMap.end(); ++it)
+			{
+				it->first->getStateMachine()->changeStateTo(it->second);
+			}
+
+			entityNewStateMap.clear();
+		}
+
 		if(!refreshed.isEmpty()) {
 			for(int i=0; i<refreshed.getCount(); i++) {
 				//TODO ADD  MANAGERs
@@ -63,7 +81,6 @@ namespace artemis {
       
 			deleted.clear();
 		}
-    
 	}
   
 	Entity& World::createEntity() {

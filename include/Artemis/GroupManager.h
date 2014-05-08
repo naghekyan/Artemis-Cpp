@@ -22,12 +22,12 @@ namespace artemis {
 	public:
 		GroupManager();
 		~GroupManager();
-		void set(std::string group, Entity& e);
+		void set(const std::string& group, Entity& e);
 		void remove(Entity& e);
 		std::string getGroupOf(Entity& e);
 		bool isGrouped(Entity& e);
-		bool isInGroup(std::string group, Entity& e);
-		ImmutableBag<Entity*>* getEntities(std::string group);
+		bool isInGroup(const std::string& group, Entity& e);
+		ImmutableBag<Entity*>* getEntities(const std::string& group);
 	};
 };
 

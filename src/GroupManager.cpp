@@ -6,13 +6,14 @@ namespace artemis {
 		empty_string.clear();
 	}
 
-	ImmutableBag<Entity*> * GroupManager::getEntities(std::string group) {
+	ImmutableBag<Entity*>* GroupManager::getEntities(const std::string& group)
+	{
 		Bag<Entity*> * bag = entitiesByGroup[group];
 		if(bag == NULL) {
-      // create a new empty group
-      bag = new Bag<Entity*>(32);
-      entitiesByGroup[group] = bag;
-    }
+		  // create a new empty group
+		  bag = new Bag<Entity*>(32);
+		  entitiesByGroup[group] = bag;
+		}
 		return bag;
 	}
 
@@ -30,7 +31,8 @@ namespace artemis {
 		return !getGroupOf(e).empty();
 	}
 
-	bool GroupManager::isInGroup(std::string group, Entity& e) {
+	bool GroupManager::isInGroup(const std::string& group, Entity& e)
+	{
 		//TODO ignore case
 		//return strncasecmp(group, getGroupOf(e)) == 0;
 		return group.compare(getGroupOf(e)) == 0;
@@ -56,7 +58,8 @@ namespace artemis {
 		}
 	}
 
-	void GroupManager::set(std::string group, Entity& e) {
+	void GroupManager::set(const std::string& group, Entity& e)
+	{
 		remove(e);
 		
 		Bag<Entity*> * entities = entitiesByGroup[group];

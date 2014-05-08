@@ -16,3 +16,5 @@
 #include <Artemis/TypeInfoComparator.h>
 #include <Artemis/EntityManager.h>
 #include <Artemis/World.h>
+#include <Artemis/EntityState.h>
+#include <Artemis/EntityStateMachine.h>

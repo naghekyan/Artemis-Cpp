@@ -13,3 +13,10 @@
 
 # Cmake build dir
 build/
+
+
+MVS2012/Debug
+MVS2012/Release
+MVS2012/ArtemisCPP.opensdf
+MVS2012/ArtemisCPP.sdf
+MVS2012/ArtemisCPP.v11.suo

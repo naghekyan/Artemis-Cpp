@@ -7,11 +7,13 @@ namespace artemis {
 		//this->world = &world;
 	}
   
-	Entity& TagManager::getEntity(const std::string tag) {
+	Entity & TagManager::getEntity(const std::string& tag)
+	{
 		return *tagByEntity[tag];
 	}
   
-	bool TagManager::isSubscribed(const std::string tag) {
+	bool TagManager::isSubscribed(const std::string& tag)
+	{
 		return (tagByEntity[tag] != NULL);
 	}
   
@@ -19,20 +21,22 @@ namespace artemis {
 		// TODO find cleaner way to remove by value
 		std::map<std::string, Entity*>::iterator it;
 		for (it = tagByEntity.begin(); it != tagByEntity.end(); ++it) {
-      if(it->second == &e){
-				tagByEntity.erase(it->first);
-				return;
-			}
-    }
+		  if(it->second == &e){
+					tagByEntity.erase(it->first);
+					return;
+				}
+		}
 
 	}
   
-	void TagManager::unSubscribe(const std::string tag) {
+	void TagManager::unSubscribe(const std::string& tag)
+	{
 		//tagByEntity[tag] = NULL;
 		tagByEntity.erase(tag);
 	}
 	
-	void TagManager::subscribe(std::string tag, Entity &e){
+	void TagManager::subscribe(const std::string& tag, Entity &e)
+	{
 		remove(e);
 		tagByEntity[tag] = &e;
 	}

@@ -7,7 +7,6 @@
 #include <typeinfo>
 #include "BitSize.h"
 #include "ImmutableBag.h"
-#include "EntityManager.h"
 #include "ComponentTypeManager.h"
 
 namespace artemis {
@@ -15,7 +14,8 @@ namespace artemis {
 	class Component;
 	class ComponentType;
 	class World;
-	//class EntityManager;
+	class EntityManager;
+	class EntityStateMachine;
   
 	/**
    * The entity class. Cannot be instantiated outside the framework, you must
@@ -24,12 +24,13 @@ namespace artemis {
   class Entity {
     
   private:
-    int id;
-    long int uniqueId;
-    std::bitset<BITSIZE> typeBits;
-    std::bitset<BITSIZE> systemBits;
-    World * world;
-    EntityManager * entityManager;
+    int						id;
+    long int				uniqueId;
+    std::bitset<BITSIZE>	typeBits;
+    std::bitset<BITSIZE>	systemBits;
+    World*					world;
+    EntityManager*			entityManager;
+	EntityStateMachine*		fsm;		
     
     // No copy constructor
     Entity(const Entity&);
@@ -61,12 +62,22 @@ namespace artemis {
     
     //Might change to non template
     template<typename c>
-    void removeComponent() {
-      entityManager->removeComponent(*this,ComponentTypeManager::getTypeFor<c>());
+    void deleteComponent() {
+      entityManager->deleteComponent(*this,ComponentTypeManager::getTypeFor<c>());
     }
     
-    void removeComponent(ComponentType & type);
+	template<typename c>
+	void reomveComponent() {
+		entityManager->removeComponent(*this,ComponentTypeManager::getTypeFor<c>());
+	}
+
+    void deleteComponent(ComponentType & type);
     
+	void removeComponent(ComponentType & type);
+
+	void deleteComponent(Component* c);
+
+	void removeComponent(Component* c);
     
     Component * getComponent(ComponentType & type);
     
@@ -78,11 +89,13 @@ namespace artemis {
     ImmutableBag<Component*> & getComponents();
     
     bool isActive();
-    void refresh();
     void remove();
-    void setGroup(std::string group);
-    void setTag(std::string tag);
+    void setGroup(const std::string& group);
+    void setTag(const std::string& tag);
     
+	EntityStateMachine* createStateMachine();
+	EntityStateMachine* getStateMachine();
+	void changeStateTo(const std::string& newState);
     
   };
 };
