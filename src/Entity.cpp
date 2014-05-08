@@ -11,6 +11,7 @@ namespace artemis {
     this->world = world;
     this->entityManager = world->getEntityManager();
     this->id = id;
+	fsm = NULL;
   }
   
   Entity::~Entity() {
@@ -60,18 +61,8 @@ namespace artemis {
     entityManager->addComponent(*this,c);
   }
   
-  void Entity::deleteComponent(ComponentType & type) {
-    entityManager->deleteComponent(*this, type);
-  }
-
-  void Entity::deleteComponent(Component* c)
-  {
-	  ComponentType type = ComponentTypeManager::getTypeFor(typeid(*c));
-	  deleteComponent(type);
-  }
-
   void Entity::removeComponent(ComponentType & type) {
-	  entityManager->removeComponent(*this, type);
+    entityManager->removeComponent(*this, type);
   }
 
   void Entity::removeComponent(Component* c)

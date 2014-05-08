@@ -43,6 +43,11 @@ namespace artemis {
 		actives.remove(&e);
 		e.removeSystemBit(systemBit);
 		removed(e);
+		// TODO Maybe it's better to actually delete the component from memory here by using typeFlags; e.getTypeBits()
+		// TODO and e.getId() so that in `EntitySystem::removed` function the user could access the "removed" component
+		// TODO in order to be able to stop rendering by calling removeChild, or to be able to stop physics simulation,
+		// TODO by removing it from the physics world or such other tasks? But on the other hand user can perform this
+		// TODO kind of tasks in the destructor of the component, and we can leave this functionality as is.
 	};
   
 	void  EntitySystem::setSystemBit(bitset<BITSIZE> bit) {

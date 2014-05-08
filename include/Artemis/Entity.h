@@ -62,23 +62,16 @@ namespace artemis {
     
     //Might change to non template
     template<typename c>
-    void deleteComponent() {
-      entityManager->deleteComponent(*this,ComponentTypeManager::getTypeFor<c>());
+    void removeComponent() {
+      entityManager->removeComponent(*this,ComponentTypeManager::getTypeFor<c>());
     }
     
-	template<typename c>
-	void reomveComponent() {
-		entityManager->removeComponent(*this,ComponentTypeManager::getTypeFor<c>());
-	}
 
-    void deleteComponent(ComponentType & type);
+
+    void removeComponent(ComponentType & type);
     
-	void removeComponent(ComponentType & type);
-
-	void deleteComponent(Component* c);
-
 	void removeComponent(Component* c);
-    
+
     Component * getComponent(ComponentType & type);
     
     template<typename c>

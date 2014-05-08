@@ -18,25 +18,21 @@ namespace artemis {
     ~EntityManager();
     Entity & create();
     void remove(Entity &e);
-    void deleteComponentsOfEntity(Entity & e);
+    void removeComponentsOfEntity(Entity & e);
     bool isActive(int entityId);
     void addComponent(Entity &e, Component * c);
     void refresh(Entity &e);
     
     void removeAllEntities();
     
-    void deleteComponent(Entity & e, ComponentType & type);
-	void removeComponent(Entity &e, ComponentType & type);
+    void removeComponent(Entity & e, ComponentType & type);
     
     template<typename c>
-    void deleteComponent(Entity & e) {
-      deleteComponent(e,ComponentTypeManager::getTypeFor<c>());
+    void removeComponent(Entity & e) {
+      removeComponent(e,ComponentTypeManager::getTypeFor<c>());
     }
 
-	template<typename c>
-	void removeComponent(Entity & e) {
-		removeComponent(e,ComponentTypeManager::getTypeFor<c>());
-	}
+
     
     Component * getComponent(Entity & e, ComponentType & type);
     

@@ -11,7 +11,12 @@ public:
 	{
 		this->velocityX = velocityX;
 		this->velocityY = velocityY;
-	};
+	}
+
+	virtual VelocityComponent* clone()
+	{
+		return new VelocityComponent(*this);
+	}
 };
 
 class PositionComponent : public artemis::Component
@@ -20,11 +25,17 @@ class PositionComponent : public artemis::Component
 public:
 	float posX;
 	float posY;
+
 	PositionComponent(float posX, float posY)
 	{
 		this->posX = posX;
 		this->posY = posY;
-	};
+	}
+
+	virtual PositionComponent* clone()
+	{
+		return new PositionComponent(*this);
+	}
 };
 
 
@@ -68,7 +79,8 @@ int main(int argc, char **argv) {
 	fsm->addPermanentComponent(new PositionComponent(0.0, 0.0));	
 	fsm->createState("move")
 		.addComponent(new VelocityComponent(2, 4));
-	// remove all non-permanent components
+	
+	// state without components: remove all non-permanent components
 	fsm->createState("stop");
 
 	player.changeStateTo("move");

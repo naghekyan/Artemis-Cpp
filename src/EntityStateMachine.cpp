@@ -44,7 +44,7 @@ namespace artemis
 
 		for (int i = 0; i < newState.size(); ++i)
 		{
-			m_entity->addComponent(newState[i]);
+			m_entity->addComponent(newState[i]->clone());
 		}
 		m_currentStateName = newStateName;
 	}
