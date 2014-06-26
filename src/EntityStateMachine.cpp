@@ -1,10 +1,14 @@
 #include "Artemis/EntityStateMachine.h"
 #include "Artemis/Entity.h"
+#include "Artemis/EntityManager.h"
+#include "Artemis/World.h"
 
 namespace artemis
 {
-	EntityStateMachine::EntityStateMachine(Entity* entity)
-		: m_entity(entity)
+	EntityStateMachine::EntityStateMachine(World* world, Entity* entity)
+		: m_world(world)
+		, m_entityManager(m_world->getEntityManager())
+		, m_entity(entity)
 		, m_currentStateName(std::string(""))
 	{
 
@@ -15,6 +19,8 @@ namespace artemis
 		// prevent duplicate states
 		assert(m_stateNameToComponentsMap.find(stateName) == m_stateNameToComponentsMap.end()
 			&& "State is already defined.");
+
+		m_states.push_back(stateName);
 
 		std::pair<StateNameToComponentsMap::iterator, bool> result = 
 			m_stateNameToComponentsMap.insert(std::pair<std::string, EntityState>(stateName, EntityState()));
@@ -40,6 +46,10 @@ namespace artemis
 			}
 		}
 
+		// Execute removed or added methods of corresponding systems in case
+		// we remove and add the same type of component into the same entity
+		m_entityManager->refresh(*m_entity);
+
 		EntityState& newState = m_stateNameToComponentsMap[newStateName];
 
 		for (int i = 0; i < newState.size(); ++i)
@@ -47,6 +57,10 @@ namespace artemis
 			m_entity->addComponent(newState[i]->clone());
 		}
 		m_currentStateName = newStateName;
+		
+		// Execute removed or added methods of corresponding systems in case
+		// we remove and add the same type of component into the same entity
+		m_entityManager->refresh(*m_entity);
 	}
 
 	EntityStateMachine& EntityStateMachine::addPermanentComponent(Component* component)
@@ -67,5 +81,20 @@ namespace artemis
 			}
 		}
 	}
+
+	bool EntityStateMachine::isStateDefined(const std::string& state)
+	{
+		StatesContainer::iterator it;
+		for (it = m_states.begin(); it != m_states.end(); ++it)
+		{
+			if (*it == state)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }
 

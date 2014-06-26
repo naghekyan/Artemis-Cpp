@@ -8,13 +8,13 @@
 #include "BitSize.h"
 #include "ImmutableBag.h"
 #include "ComponentTypeManager.h"
+#include "EntityManager.h"
 
 namespace artemis {
   
 	class Component;
 	class ComponentType;
 	class World;
-	class EntityManager;
 	class EntityStateMachine;
   
 	/**

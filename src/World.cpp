@@ -50,7 +50,7 @@ namespace artemis {
   
 	void World::loopStart() {
 
-		if (entityNewStateMap.size() > 0)
+		if (!entityNewStateMap.empty())
 		{
 			EntityToStateMap::iterator it;
 			for (it = entityNewStateMap.begin(); it != entityNewStateMap.end(); ++it)

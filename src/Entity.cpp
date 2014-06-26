@@ -121,7 +121,7 @@ namespace artemis {
 	  assert(fsm == NULL && "FSM is already created.");
 	  if (fsm == NULL)
 	  {
-		fsm = new EntityStateMachine(this);
+		  fsm = new EntityStateMachine(world, this);
 	  }
 	  return fsm;
   }
