@@ -15,15 +15,15 @@
 
 namespace artemis {
   
-	class Entity;
-	class World;
+    class Entity;
+    class World;
   
-	/**
+    /**
    * The most raw entity system. It should not typically be used, but you can create your own
    * entity system handling by extending this. It is recommended that you use the other provided
    * entity system implementations.
    */
-	class EntitySystem {
+    class EntitySystem {
   public:
     void printTypeFlag() {
       std::cout << typeFlags;
@@ -63,7 +63,7 @@ namespace artemis {
     std::bitset<BITSIZE> typeFlags;
     Bag<Entity*> actives;
     void remove(Entity &e);
-	};
+    };
   
 };
 

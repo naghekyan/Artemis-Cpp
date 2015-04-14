@@ -8,8 +8,6 @@ namespace artemis {
   class Component {
   public:
     virtual ~Component() = 0;
-
-	virtual Component* clone() = 0;
   protected:
     Component() {};
   };

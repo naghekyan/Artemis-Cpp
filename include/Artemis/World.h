@@ -7,9 +7,9 @@
 #include "GroupManager.h"
 
 namespace artemis {
-	class Entity;
-	class EntityManager;
-	class SystemManager;
+    class Entity;
+    class EntityManager;
+    class SystemManager;
   
   
   /**
@@ -19,10 +19,7 @@ namespace artemis {
    *
    * It is also important to set the delta each game loop iteration, and initialize before game loop.
    */
-	class World {
-
-		typedef std::map<Entity*, std::string> EntityToStateMap;
-
+    class World {
 
   public:
     World();
@@ -35,7 +32,6 @@ namespace artemis {
     void setDelta(float delta);
     void deleteEntity(Entity& e);
     void refreshEntity(Entity& e);
-	void changeEntityStateTo(Entity* e, const std::string& newState);
     Entity& createEntity();
     Entity& getEntity(int entityId);
     void loopStart();
@@ -50,8 +46,6 @@ namespace artemis {
     float					delta;
     Bag<Entity*>			refreshed;
     Bag<Entity*>			deleted;
-	EntityToStateMap		entityNewStateMap;
-
-	};
+    };
 };
 #endif // $(Guard token)

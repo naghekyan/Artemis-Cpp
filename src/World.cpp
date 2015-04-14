@@ -4,113 +4,96 @@
 #include "Artemis/EntityManager.h"
 #include "Artemis/SystemBitManager.h"
 #include "Artemis/ComponentType.h"
-#include "Artemis/EntityStateMachine.h"
 
 
 namespace artemis {
   
-	World::World() {
-		//TODO add more managers
-		this->systemManager = new SystemManager(*this);
-		this->entityManager = new EntityManager(*this);
-		this->groupManager = new GroupManager();
-		this->tagManager = new TagManager();
-		delta = 0;
-	}
+    World::World() {
+        //TODO add more managers
+        this->systemManager = new SystemManager(*this);
+        this->entityManager = new EntityManager(*this);
+        this->groupManager = new GroupManager();
+        this->tagManager = new TagManager();
+        delta = 0;
+    }
   
-	void World::deleteEntity(Entity& e) {
-		if(!deleted.contains(&e))
-			deleted.add(&e);
-	}
-  
-	void World::changeEntityStateTo(Entity* e, const std::string& newState)
-	{
-		entityNewStateMap[e] = newState;
-	}
+    void World::deleteEntity(Entity& e) {
+        if(!deleted.contains(&e))
+            deleted.add(&e);
+    }
 
-	float World::getDelta() {
-		return this->delta;
-	}
+    float World::getDelta() {
+        return this->delta;
+    }
   
-	SystemManager* World::getSystemManager() {
-		return systemManager;
-	}
+    SystemManager* World::getSystemManager() {
+        return systemManager;
+    }
   
-	EntityManager* World::getEntityManager() {
-		return entityManager;
-	}
-	
-	GroupManager* World::getGroupManager(){
-		return groupManager;
-	}
-	
-	TagManager* World::getTagManager(){
-		return tagManager;
-	}
-  
-	void World::loopStart() {
-
-		if (!entityNewStateMap.empty())
-		{
-			EntityToStateMap::iterator it;
-			for (it = entityNewStateMap.begin(); it != entityNewStateMap.end(); ++it)
-			{
-				it->first->getStateMachine()->changeStateTo(it->second);
-			}
-
-			entityNewStateMap.clear();
-		}
-
-		if(!refreshed.isEmpty()) {
-			for(int i=0; i<refreshed.getCount(); i++) {
-				//TODO ADD  MANAGERs
-				entityManager->refresh(*refreshed.get(i));
-			}
-      
-			refreshed.clear();
-      
-		}
+    EntityManager* World::getEntityManager() {
+        return entityManager;
+    }
     
-		if(!deleted.isEmpty()) {
-			for(int i=0; i<deleted.getCount(); i++) {
-				Entity & e = *deleted.get(i);
-				groupManager->remove(e);
-				tagManager->remove(e);
-				entityManager->remove(e);
-			}
+    GroupManager* World::getGroupManager(){
+        return groupManager;
+    }
+    
+    TagManager* World::getTagManager(){
+        return tagManager;
+    }
+  
+    void World::loopStart() {
+
+        if(!refreshed.isEmpty()) {
+            for(int i=0; i<refreshed.getCount(); i++) {
+                //TODO ADD  MANAGERs
+                entityManager->refresh(*refreshed.get(i));
+            }
       
-			deleted.clear();
-		}
-	}
+            refreshed.clear();
+      
+        }
+    
+        if(!deleted.isEmpty()) {
+            for(int i=0; i<deleted.getCount(); i++) {
+                Entity & e = *deleted.get(i);
+                groupManager->remove(e);
+                tagManager->remove(e);
+                entityManager->remove(e);
+            }
+      
+            deleted.clear();
+        }
+    }
   
-	Entity& World::createEntity() {
-		return entityManager->create();
-	}
+    Entity& World::createEntity() {
+        return entityManager->create();
+    }
   
-	Entity& World::getEntity(int entityId) {
-		return entityManager->getEntity(entityId);
-	}
+    Entity& World::getEntity(int entityId) {
+        return entityManager->getEntity(entityId);
+    }
   
   
-	void World::refreshEntity(Entity& e) {
-		refreshed.add(&e);
-	}
+    void World::refreshEntity(Entity& e) {
+        refreshed.add(&e);
+    }
   
-	void World::setDelta(float delta) {
-		this->delta = delta;
-	}
+    void World::setDelta(float delta) {
+        this->delta = delta;
+    }
   
-	World::~World() {
-		//Entity manager should be deleted first.
+    World::~World() {
+        //Entity manager should be deleted first.
     refreshed.clear();
     deleted.clear();
     
-		delete entityManager;
-		delete systemManager;
-		delete groupManager;
-		delete tagManager;
-		ComponentTypeManager::deleteComponentTypes();
-		SystemBitManager::removeBitSets();
+        delete entityManager;
+        delete systemManager;
+        delete groupManager;
+        delete tagManager;
+        ComponentTypeManager::deleteComponentTypes();
+        SystemBitManager::removeBitSets();
     ComponentType::reset();
-	}
+    }
 };

@@ -12,12 +12,12 @@
 
 namespace artemis {
   
-	class Component;
-	class ComponentType;
-	class World;
-	class EntityStateMachine;
+    class Component;
+    class ComponentType;
+    class World;
+    class EntityStateMachine;
   
-	/**
+    /**
    * The entity class. Cannot be instantiated outside the framework, you must
    * create new entities using World.
    */
@@ -30,7 +30,6 @@ namespace artemis {
     std::bitset<BITSIZE>	systemBits;
     World*					world;
     EntityManager*			entityManager;
-	EntityStateMachine*		fsm;		
     
     // No copy constructor
     Entity(const Entity&);
@@ -70,12 +69,12 @@ namespace artemis {
 
     void removeComponent(ComponentType & type);
     
-	void removeComponent(Component* c);
+    void removeComponent(Component* c);
 
     Component * getComponent(ComponentType & type);
     
     template<typename c>
-    Component * getComponent() {
+    c* getComponent() {
       return (c*)entityManager->getComponent(*this,ComponentTypeManager::getTypeFor<c>());
     }
     
@@ -86,9 +85,8 @@ namespace artemis {
     void setGroup(const std::string& group);
     void setTag(const std::string& tag);
     
-	EntityStateMachine* createStateMachine();
-	EntityStateMachine* getStateMachine();
-	void changeStateTo(const std::string& newState);
+    EntityStateMachine* createStateMachine();
+    EntityStateMachine* getStateMachine();
     
   };
 };

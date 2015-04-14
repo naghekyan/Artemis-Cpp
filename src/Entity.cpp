@@ -3,7 +3,6 @@
 #include "Artemis/Component.h"
 #include "Artemis/World.h"
 #include "Artemis/EntityManager.h"
-#include "Artemis/EntityStateMachine.h"
 
 namespace artemis {
   
@@ -11,7 +10,6 @@ namespace artemis {
     this->world = world;
     this->entityManager = world->getEntityManager();
     this->id = id;
-	fsm = NULL;
   }
   
   Entity::~Entity() {
@@ -67,8 +65,8 @@ namespace artemis {
 
   void Entity::removeComponent(Component* c)
   {
-	  ComponentType type = ComponentTypeManager::getTypeFor(typeid(*c));
-	  removeComponent(type);
+      ComponentType type = ComponentTypeManager::getTypeFor(typeid(*c));
+      removeComponent(type);
   }
 
   void Entity::removeSystemBit(std::bitset<BITSIZE> bit) {
@@ -115,27 +113,5 @@ namespace artemis {
   void Entity::remove() {
     world->deleteEntity(*this);
   }
-
-  EntityStateMachine* Entity::createStateMachine()
-  {
-	  assert(fsm == NULL && "FSM is already created.");
-	  if (fsm == NULL)
-	  {
-		  fsm = new EntityStateMachine(world, this);
-	  }
-	  return fsm;
-  }
-
-
-  EntityStateMachine* Entity::getStateMachine()
-  {
-	  return fsm;
-  }
-
-  void Entity::changeStateTo(const std::string& newState)
-  {
-	  world->changeEntityStateTo(this, newState);
-  }
-
 
 };
